@@ -1,0 +1,5 @@
+word,R,G,B,X,Y
+Main Menu,255,0,0,100,100
+Single.Player,255,255,255,100,200
+Multiplayer,255,255,255,100,300
+PLAY,0,255,0,100,500
