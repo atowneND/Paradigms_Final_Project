@@ -26,3 +26,6 @@ class Maps():
                     size = (x,y,width,width)
                     self.draw_box(size)
 
+    def tick(self):
+        self.draw_grid()
+
