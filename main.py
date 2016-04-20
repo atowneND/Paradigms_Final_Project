@@ -14,12 +14,15 @@ class GameSpace:
         self.screen = pygame.display.set_mode(self.size, 0, 32)
 
     def main(self):
+        ship = "cruiser"
+        ship = "blueship"
+        s = Ship(self, ship)
         while 1:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            self.test_maps()
+            self.test_Ship(s)
             #self.test_main_menu()
             pygame.display.flip()
         self.test_maps()
@@ -29,16 +32,9 @@ class GameSpace:
         main_menu = Menu(self, csvfile)
         main_menu.tick()
 
-    def test_maps(self):
-        csvfile = "grid.dat"
-        img = "blueship.png"
-
-        csvfile = "cruiser.dat"
-        img = "cruiser.png"
-        settings = "cruiser_settings.csv"
-        grid = Maps(self, csvfile)
-        s = Ship(self, img, grid, settings)
-        s.tick()
+    def test_Ship(self, ship):
+        # tests Ship() and Maps()
+        ship.tick()
 
 if __name__ == "__main__":
     gs = GameSpace()
