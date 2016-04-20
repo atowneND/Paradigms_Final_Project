@@ -13,15 +13,20 @@ class GameSpace:
 
         self.screen = pygame.display.set_mode(self.size, 0, 32)
 
+        self.mouse_pos = [0,0]
+
     def main(self):
-        ship = "cruiser"
         ship = "blueship"
+        ship = "cruiser"
         s = Ship(self, ship)
         while 1:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    # http://stackoverflow.com/questions/12150957/pygame-action-when-mouse-click-on-rect
+                    self.mouse_pos = pygame.mouse.get_pos()
             self.test_Ship(s)
             #self.test_main_menu()
             pygame.display.flip()
