@@ -32,9 +32,12 @@ class GameSpace:
     def test_maps(self):
         csvfile = "grid.dat"
         img = "blueship.png"
+
+        csvfile = "cruiser.dat"
         img = "cruiser.png"
+        settings = "cruiser_settings.csv"
         grid = Maps(self, csvfile)
-        s = Ship(self, img, grid)
+        s = Ship(self, img, grid, settings)
         s.tick()
 
 if __name__ == "__main__":
