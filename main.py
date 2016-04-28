@@ -30,6 +30,7 @@ class GameSpace:
             self.test_Ship(s)
             #self.test_main_menu()
             pygame.display.flip()
+            self.mouse_pos = (0,0)
         self.test_maps()
 
     def test_main_menu(self):
