@@ -19,11 +19,30 @@ class Maps():
         s = 0
         for j in xrange(len(self.layout)):
             for i in xrange(len(self.layout[j])):
-                if self.layout[j][i] == 1:
+                room = self.layout[j][i]
+                if room >= 1:
                     b = Box(width)
                     b.x = (top_left_corner[0] + width*i)
                     b.y = (top_left_corner[1] + width*j)
                     b.color = WHITE
+                    if room==1:
+                        b.room = "empty"
+                    elif room==2:
+                        b.room = "bridge"
+                    elif room==3:
+                        b.room = "shields"
+                    elif room==4:
+                        b.room = "weapons"
+                    elif room==5:
+                        b.room = "engines"
+                    elif room==6:
+                        b.room = "sensors"
+                    elif room==7:
+                        b.room = "medbay"
+                    elif room==8:
+                        b.room = "oxygen"
+                    elif room==9:
+                        b.room = "other"
                     self.grid.append(b)
 
     def draw_box(self,size,color):
