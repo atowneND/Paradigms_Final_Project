@@ -1,0 +1,17 @@
+SHIP possibilities
+rooms: (property of Box)
+- bridge
+- shields
+- weapons
+- engines
+- sensors
+- medbay (?)
+- oxygen (?)
+
+weapons: (class, property of ship)
+- ion pulse (stun, no damage)
+    - variable number of pulses
+- laser 1 (1 damage)
+- laser 2 (2 damage)
+- missile 1 (1 damage, ignores shields)
+- missile 2 (2 damage, ignores shields)

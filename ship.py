@@ -28,6 +28,11 @@ class Ship(pygame.sprite.Sprite):
         self.size = self.image.get_size()
         self.image = pygame.transform.scale(self.image, (int(self.size[0]*scale_fac), int(self.size[1]*scale_fac)))
 
+        # shields
+        # weapons
+        # health
+        # crew?
+
     def tick(self):
         self.gs.screen.blit(self.image, self.rect)
         self.grid.tick()
