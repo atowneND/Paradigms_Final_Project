@@ -1,11 +1,30 @@
 import pygame
 import csv
 
+WHITE = (255,255,255)
+GREEN = (0,255,150)
+RED = (235, 12, 12)
+
 class Maps():
     def __init__(self, gs, csvfile):
         self.gs = gs
+        width = 50
+        top_left_corner = (100,100)
+
         with open(csvfile) as f:
-            self.grid = [[int(x) for x in line.split()] for line in f]
+            self.layout = [[int(x) for x in line.split()] for line in f]
+        nboxes = sum([sum(x) for x in self.layout])
+        self.grid = []
+
+        s = 0
+        for j in xrange(len(self.layout)):
+            for i in xrange(len(self.layout[j])):
+                if self.layout[j][i] == 1:
+                    b = Box(width)
+                    b.x = (top_left_corner[0] + width*i)
+                    b.y = (top_left_corner[1] + width*j)
+                    b.color = WHITE
+                    self.grid.append(b)
 
     def draw_box(self,size,color):
         BLUE = (22,25,196)
@@ -13,27 +32,22 @@ class Maps():
         pygame.draw.rect(self.gs.screen,BLUE,size,4)
 
     def draw_grid(self):
-        width = 50
-        top_left_corner = (100,100)
-
-        WHITE = (255,255,255)
-        GREEN = (0,255,150)
-        RED = (235, 12, 12)
-        color = WHITE
-
-        num_rows = len(self.grid) # down, number of rows
-        for j in xrange(num_rows):
-            for i in xrange(len(self.grid[j])):
-                if self.grid[j][i]==1:
-                    x = (top_left_corner[0] + width * i)
-                    y = (top_left_corner[1] + width * j)
-                    if pygame.Rect(x,y,width,width).collidepoint(self.gs.mouse_pos):
-                        color = GREEN
-                    else:
-                        color = WHITE
-                    size = (x,y,width,width)
-                    self.draw_box(size, color)
+        for b in self.grid:
+            if pygame.Rect(b.x, b.y, b.width, b.height).collidepoint(self.gs.mouse_pos):
+                if b.color != GREEN:
+                    b.color = GREEN
+                else:
+                    b.color = WHITE
+            size = (b.x,b.y,b.width,b.height)
+            self.draw_box(size, b.color)
 
     def tick(self):
         self.draw_grid()
 
+class Box():
+    def __init__(self, width):
+        self.x = 0
+        self.y = 0
+        self.width = width
+        self.height = width
+        self.color = (0,0,0)
