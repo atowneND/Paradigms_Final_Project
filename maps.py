@@ -25,22 +25,30 @@ class Maps():
                     b.x = (top_left_corner[0] + width*i)
                     b.y = (top_left_corner[1] + width*j)
                     b.color = WHITE
+                    b.img = ""
                     if room==1:
                         b.room = "empty"
                     elif room==2:
                         b.room = "bridge"
+                        b.img = "rooms/"+b.room+".png"
                     elif room==3:
                         b.room = "shields"
+                        b.img = "rooms/"+b.room+".png"
                     elif room==4:
                         b.room = "weapons"
+                        b.img = "rooms/"+b.room+".png"
                     elif room==5:
                         b.room = "engines"
+                        b.img = "rooms/"+b.room+".png"
                     elif room==6:
                         b.room = "sensors"
+                        b.img = "rooms/"+b.room+".png"
                     elif room==7:
                         b.room = "medbay"
+                        b.img = "rooms/"+b.room+".png"
                     elif room==8:
                         b.room = "oxygen"
+                        b.img = "rooms/"+b.room+".png"
                     elif room==9:
                         b.room = "other"
                     self.grid.append(b)
@@ -57,6 +65,8 @@ class Maps():
                     b.color = GREEN
                 else:
                     b.color = WHITE
+            if b.img:
+                b.color = RED
             size = (b.x,b.y,b.width,b.height)
             self.draw_box(size, b.color)
 
