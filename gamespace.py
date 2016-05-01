@@ -6,7 +6,7 @@ from ship import Ship
 from twisted.internet import reactor as reactor
 
 class GameSpace:
-    def __init__(self):
+    def __init__(self, queue):
         pygame.init()
 
         self.size = self.width, self.height = (2048, 2048)
@@ -18,8 +18,9 @@ class GameSpace:
 
         ship = "cruiser"
         self.ship = Ship(self, ship)
+        queue.put(ship + "\r\n\r\n")
 
-    def update(self):
+    def update(self, queue):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 reactor.stop()
