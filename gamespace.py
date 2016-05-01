@@ -16,9 +16,14 @@ class GameSpace:
 
         self.mouse_pos = [0,0]
 
+        self.gameStarted = False
+
         ship = "cruiser"
         self.ship = Ship(self, ship)
         queue.put(ship + "\r\n")
+
+        self.menu = Menu(self, "main_menu.csv")
+        self.menu.tick()
 
     def update(self, queue):
         for event in pygame.event.get():
@@ -33,15 +38,16 @@ class GameSpace:
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 # http://stackoverflow.com/questions/12150957/pygame-action-when-mouse-click-on-rect
                 self.mouse_pos = pygame.mouse.get_pos()
-            #self.test_Ship(self.ship)
-            self.test_main_menu()
+                if self.gameStarted:
+                    print "players playing"
+                else: 
+                    p = self.menu.clickHandler(self.mouse_pos)
+                    print p
+
+            if self.gameStarted:
+                self.test_Ship(self.ship)
             pygame.display.flip()
             self.mouse_pos = (0,0)
-
-    def test_main_menu(self):
-        csvfile = "main_menu.csv"
-        main_menu = Menu(self, csvfile)
-        main_menu.tick()
 
     def test_Ship(self, ship):
         # tests Ship() and Maps()
