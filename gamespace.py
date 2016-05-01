@@ -9,7 +9,7 @@ class GameSpace:
     def __init__(self, queue):
         pygame.init()
 
-        self.size = self.width, self.height = (2048, 2048)
+        self.size = self.width, self.height = (800, 800)
         self.black = 0, 0, 0
 
         self.screen = pygame.display.set_mode(self.size, 0, 32)
@@ -33,8 +33,8 @@ class GameSpace:
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 # http://stackoverflow.com/questions/12150957/pygame-action-when-mouse-click-on-rect
                 self.mouse_pos = pygame.mouse.get_pos()
-            self.test_Ship(self.ship)
-            #self.test_main_menu()
+            #self.test_Ship(self.ship)
+            self.test_main_menu()
             pygame.display.flip()
             self.mouse_pos = (0,0)
 

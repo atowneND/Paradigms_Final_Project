@@ -58,7 +58,6 @@ class GameConnection:
         gs = GameSpace(gs_queue)
         lc = LoopingCall(gs.update, gs_queue)
         lc.start(0.1)
-
         reactor.connectTCP(host, port1, ClientConnectionFactory(port1, gs))
         reactor.run()
 
