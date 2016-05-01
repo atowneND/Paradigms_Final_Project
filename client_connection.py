@@ -1,6 +1,7 @@
 from twisted.internet import reactor as reactor
 from twisted.internet.protocol import ClientFactory, Protocol
 from twisted.internet.task import LoopingCall
+from twisted.internet.error import CannotListenError
 
 import pygame
 import sys
@@ -30,10 +31,17 @@ class ClientConnection(Protocol):
 class ClientConnectionFactory(ClientFactory):
     def __init__(self, port):
         self.port = port
-    protocol = ClientConnection
+        protocol = ClientConnection
 
     def buildProtocol(self, addr):
         return ClientConnection(self.port)
+
+    def clientConnectionFailed(self, connector, reason):
+        if self.port == port1:
+            reactor.connectTCP(host, port2, ClientConnectionFactory(port2))
+        else:
+            print "Connection failed"
+            reactor.stop()
 
 class GameConnection:
     def __init__(self):
@@ -41,14 +49,6 @@ class GameConnection:
         lc = LoopingCall(gs.update)
         lc.start(0.1)
 
-        try:
-            print "connecting to",port1
-            reactor.connectTCP(host, port1, ClientConnectionFactory(port1))
-        except socket.error:
-            print "connecting to",port2
-            reactor.connectTCP(host, port2, ClientConnectionFactory(port2))
-        except:
-            print "Unable to connect"
-            exit()
+        reactor.connectTCP(host, port1, ClientConnectionFactory(port1))
         reactor.run()
 
