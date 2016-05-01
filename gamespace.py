@@ -18,7 +18,7 @@ class GameSpace:
 
         ship = "cruiser"
         self.ship = Ship(self, ship)
-        queue.put(ship + "\r\n\r\n")
+        queue.put(ship + "\r\n")
 
     def update(self, queue):
         for event in pygame.event.get():

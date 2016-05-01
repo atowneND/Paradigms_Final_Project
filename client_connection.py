@@ -17,12 +17,11 @@ host = "student02.cse.nd.edu"
 port1 = 40084
 port2 = 40092
 
-x = 0
 gs_queue = DeferredQueue()
 
 class ClientConnection(Protocol):
     def __init__(self, port, gs):
-        self.delimiter = "\r\n\r\n"
+        self.delimiter = "\r\n"
         self.port = port
         self.gs = gs
 

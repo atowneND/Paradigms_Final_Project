@@ -2,7 +2,7 @@ SHIPS
 grid.dat:
 a series of 0's and 1's to be turned into rooms
 0 means no room, 1 means room
-higher numbers will be added in the future to specify room functionality
+higher numbers specify room functionality
 
 weapons images:
 http://www.ftlgame.com/forum/viewtopic.php?t=24475&start=270
