@@ -65,13 +65,32 @@ class Maps():
                     b.color = GREEN
                 else:
                     b.color = WHITE
-            if b.img:
-                b.color = RED
             size = (b.x,b.y,b.width,b.height)
             self.draw_box(size, b.color)
+            if b.img:
+                if 'image' not in dir(b):
+                    b.image = RoomFunction(self.gs,b)
+                    b.image.tick()
+                else:
+                    b.image.tick()
 
     def tick(self):
         self.draw_grid()
+
+class RoomFunction(pygame.sprite.Sprite):
+    def __init__(self, gs, box):
+        self.gs = gs
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = pygame.image.load(box.img)
+        self.rect = self.image.get_rect()
+
+        # position
+        self.rect.centerx = box.x + 0.5*box.width
+        self.rect.centery = box.y + 0.5*box.height
+
+    def tick(self):
+        self.gs.screen.blit(self.image, self.rect)
 
 class Box():
     def __init__(self, width):
