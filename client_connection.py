@@ -25,6 +25,10 @@ class ClientConnection(Protocol):
 
     def dataReceived(self, data):
         print "received data:", data
+        strings = data.split()
+        if strings[0] == "START":
+            self.gs.otherShip = Ship(self.gs, strings[1].lower(), strings[2])
+            self.gs.otherShip.tick()
 
     def connectionMade(self):
         print "now connected to", host, "port", self.port

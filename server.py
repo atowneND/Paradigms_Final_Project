@@ -9,6 +9,7 @@ import cPickle as pickle
 
 p1Ship = ""
 p2Ship = ""
+startGame = False
 queueToP1 = DeferredQueue()
 queueToP2 = DeferredQueue()
 
@@ -36,6 +37,10 @@ class PlayerCommand(LineReceiver):
                 p1Ship = line
             else:
                 p2Ship = line
+            # Send ship data if both players ready
+            if p1Ship != "" and p2Ship != "":
+                queueToP1.put("START " + p2Ship + " 2")
+                queueToP2.put("START " + p1Ship + " 1")
         else:
             if self.player == 1:
                 queueToP2.put(line)

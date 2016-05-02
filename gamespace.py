@@ -27,7 +27,8 @@ class GameSpace:
 
         self.menu = Menu(self, "main_menu.csv")
         self.menu.tick()
-        self.ship = None
+        self.myShip = None
+        self.otherShip = None
 
     def update(self, queue):
         for event in pygame.event.get():
@@ -53,11 +54,13 @@ class GameSpace:
                     elif p == "Blueship" or p == "Cruiser":
                         self.queue.put(p) 
                         self.screen.fill(self.black)
-                        self.ship = Ship(self,p.lower(),str(self.player))
+                        self.myShip = Ship(self,p.lower(),str(self.player))
                         self.gameStarted = True
 
             if self.gameStarted:
-                self.ship.tick()
+                self.myShip.tick()
+                if self.otherShip != None:
+                    self.otherShip.tick()
 
             pygame.display.flip()
             self.mouse_pos = (0,0)
