@@ -9,7 +9,7 @@ class GameSpace:
     def __init__(self, queue):
         pygame.init()
 
-        self.size = self.width, self.height = (800, 800)
+        self.size = self.width, self.height = (1200, 600)
         self.black = 0, 0, 0
 
         self.screen = pygame.display.set_mode(self.size, 0, 32)
@@ -22,6 +22,7 @@ class GameSpace:
         self.menu = Menu(self, "main_menu.csv")
         #self.menu = Menu(self, "ship_menu.csv")
         self.menu.tick()
+        self.ship = None
 
     def update(self, queue):
         for event in pygame.event.get():
@@ -47,7 +48,11 @@ class GameSpace:
                     elif p == "Blueship" or p == "Cruiser":
                         self.queue.put(p) 
                         self.screen.fill(self.black)
+                        self.ship = Ship(self,p.lower())
                         self.gameStarted = True
+
+            if self.gameStarted:
+                self.ship.tick()
 
             pygame.display.flip()
             self.mouse_pos = (0,0)

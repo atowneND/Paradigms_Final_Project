@@ -14,7 +14,6 @@ class Ship(pygame.sprite.Sprite):
                 self.settings = s
 
         self.gs = gs
-        self.grid = Maps(self.gs, gridfile)
 
         self.image = pygame.image.load(img)
         self.rect = self.image.get_rect()
@@ -23,6 +22,14 @@ class Ship(pygame.sprite.Sprite):
         self.rect.x = int(self.settings['x'])
         self.rect.y = int(self.settings['y'])
 
+        grid_pos = (0,0)
+        if ship_type == "cruiser":
+            grid_pos = (self.rect.x+70, self.rect.y+50)
+        else:
+            grid_pos = (self.rect.x+100, self.rect.y+50)
+
+        self.grid = Maps(self.gs, grid_pos, gridfile)
+        
         # resize
         scale_fac = float(self.settings['scale_fac'])
         self.size = self.image.get_size()

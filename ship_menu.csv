@@ -1,4 +1,4 @@
 word,R,G,B,X,Y
-Choose a Ship,255,0,0,250,100
-Cruiser,0,0,255,300,300
-Blueship,0,0,255,290,400
+Choose a Ship,255,0,0,450,100
+Cruiser,0,0,255,500,300
+Blueship,0,0,255,490,400
