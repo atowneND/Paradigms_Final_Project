@@ -37,7 +37,7 @@ class GameSpace:
                 # http://stackoverflow.com/questions/12150957/pygame-action-when-mouse-click-on-rect
                 self.mouse_pos = pygame.mouse.get_pos()
                 if self.gameStarted:
-                    print "players playing"
+                    self.queue.put("DATA DATA DATA")
                 else: 
                     p = self.menu.clickHandler(self.mouse_pos)
                     print p
@@ -49,8 +49,6 @@ class GameSpace:
                         self.screen.fill(self.black)
                         self.gameStarted = True
 
-            if self.gameStarted:
-                print 'playing!'
             pygame.display.flip()
             self.mouse_pos = (0,0)
 

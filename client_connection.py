@@ -23,7 +23,7 @@ class ClientConnection(Protocol):
         self.port = port
         self.gs = gs
 
-    def lineReceived(self, data):
+    def dataReceived(self, data):
         print "received data:", data
 
     def connectionMade(self):
@@ -46,12 +46,6 @@ class ClientConnectionFactory(ClientFactory):
 
     def buildProtocol(self, addr):
         return ClientConnection(self.port, self.gs)
-
-    def clientConnectionFailed(self, connector, reason):
-        if self.port == port1:
-            reactor.connectTCP(host, port2, ClientConnectionFactory(port2, self.gs))
-        else:
-            print "Connection failed"
 
 class GameConnection:
     def __init__(self, port):

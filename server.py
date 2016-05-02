@@ -9,27 +9,49 @@ import cPickle as pickle
 
 p1Ship = ""
 p2Ship = ""
+queueToP1 = DeferredQueue()
+queueToP2 = DeferredQueue()
 
 class PlayerCommand(LineReceiver):
     def __init__(self, port):
-        self.queue = DeferredQueue()
         self.port = port
+        self.player = 0
+        if self.port == 40084:
+            self.player = 1
+        else:
+            self.player = 2
 
     def connectionMade(self):
         print 'connection made on port ', self.port
-        self.queue.get().addCallback(self.callback) 
+        global queueToP1, queueToP2
+        if self.player == 1:
+            queueToP2.get().addCallback(self.callback)
+        else:
+            queueToP1.get().addCallback(self.callback)
 
     def dataReceived(self, data):
-        global p1Ship, p2Ship
+        print data
+        global p1Ship, p2Ship, queueToP1, queueToP2
         if p1Ship == "" or p2Ship == "":
-            if self.port == 40084:
+            if self.player == 1:
                 p1Ship = data
-            elif self.port == 40092:
+            else:
                 p2Ship = data
+        else:
+            if self.player == 1:
+                queueToP2.put(data)
+            else:
+                queueToP1.put(data)
+
 
     def callback(self, data):
         self.transport.write(data)
-        self.queue.get().addCallback(self.callback) 
+        
+        global queueToP1, queueToP2
+        if self.player == 1:
+            queueToP2.get().addCallback(self.callback) 
+        else:
+            queueToP1.get().addCallback(self.callback) 
 
 
 class PlayerFactory(Factory):
@@ -48,7 +70,7 @@ class GameSpace():
         # Update the gamespace
         global p1Ship, p2Ship
         if p1Ship != "" and p2Ship != "":
-            print 'update'
+            return
 
 if __name__ == '__main__':
     reactor.listenTCP(40084, PlayerFactory(40084))
