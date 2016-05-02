@@ -23,35 +23,33 @@ class PlayerCommand(LineReceiver):
 
     def connectionMade(self):
         print 'connection made on port ', self.port
-        global queueToP1, queueToP2
         if self.player == 1:
-            queueToP2.get().addCallback(self.callback)
-        else:
             queueToP1.get().addCallback(self.callback)
+        else:
+            queueToP2.get().addCallback(self.callback)
 
-    def dataReceived(self, data):
-        print data
-        global p1Ship, p2Ship, queueToP1, queueToP2
+    def lineReceived(self, line):
+        print "Player", self.player, "sent data:", line
+        global p1Ship, p2Ship
         if p1Ship == "" or p2Ship == "":
             if self.player == 1:
-                p1Ship = data
+                p1Ship = line
             else:
-                p2Ship = data
+                p2Ship = line
         else:
             if self.player == 1:
-                queueToP2.put(data)
+                queueToP2.put(line)
             else:
-                queueToP1.put(data)
+                queueToP1.put(line)
 
 
     def callback(self, data):
         self.transport.write(data)
         
-        global queueToP1, queueToP2
         if self.player == 1:
-            queueToP2.get().addCallback(self.callback) 
-        else:
             queueToP1.get().addCallback(self.callback) 
+        else:
+            queueToP2.get().addCallback(self.callback) 
 
 
 class PlayerFactory(Factory):

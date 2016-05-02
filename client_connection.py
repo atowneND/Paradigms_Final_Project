@@ -31,7 +31,7 @@ class ClientConnection(Protocol):
         self.gs.queue.get().addCallback(self.sendData)
 
     def sendData(self, data):
-        self.transport.write(data)
+        self.transport.write(data + self.delimiter)
         self.gs.queue.get().addCallback(self.sendData)
 
     def connectionLost(self, reason):
