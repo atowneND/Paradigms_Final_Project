@@ -7,18 +7,19 @@ from twisted.internet import reactor
 import time
 import cPickle as pickle
 
-playersConnected = 0
+playersReady = 0
 
 class PlayerCommand(LineReceiver):
     def __init__(self):
         self.queue = DeferredQueue()
 
     def connectionMade(self):
-       playersConnected += 1
-       self.queue.get().addCallback(self.callback) 
+        self.queue.get().addCallback(self.callback) 
 
-    #def dataReceived(self, data):
-        # handle received data
+    def dataReceived(self, data):
+        print data
+        global playersReady
+        playersReady += 1
 
     def callback(self, data):
         self.transport.write(data)
@@ -30,7 +31,7 @@ class PlayerFactory(Factory):
         pass
 
     def buildProtocol(self, addr):
-        return PlayerCommand(addr)
+        return PlayerCommand()
 
 class GameSpace():
     def __init__(self):
@@ -39,14 +40,12 @@ class GameSpace():
 
     def tick(self):
         # Update the gamespace
-        print 'update'
+        while playersReady == 2:
+            print 'update'
 
 if __name__ == '__main__':
     reactor.listenTCP(40084, PlayerFactory())
     reactor.listenTCP(40092, PlayerFactory())
-    while playersConnected != 2:
-        time.sleep(2)
-        print "Waiting for players to join..."
     gs = GameSpace()
     LC = LoopingCall(gs.tick)
     LC.start(1/60)

@@ -18,10 +18,6 @@ class GameSpace:
 
         self.gameStarted = False
 
-        ship = "cruiser"
-        self.ship = Ship(self, ship)
-        queue.put(ship + "\r\n")
-
         self.menu = Menu(self, "main_menu.csv")
         #self.menu = Menu(self, "ship_menu.csv")
         self.menu.tick()
@@ -47,9 +43,13 @@ class GameSpace:
                     if p == "PLAY":
                         self.menu = Menu(self, "ship_menu.csv")
                         self.menu.tick()
+                    elif p == "Blueship" or p == "Cruiser":
+                        queue.put(p)
+                        self.screen.fill(self.black)
+                        self.gameStarted = True
 
             if self.gameStarted:
-                self.test_Ship(self.ship)
+                print 'playing!'
             pygame.display.flip()
             self.mouse_pos = (0,0)
 

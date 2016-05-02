@@ -30,10 +30,11 @@ class ClientConnection(Protocol):
 
     def connectionMade(self):
         print "now connected to", host, "port", self.port
-        def sendData(data):
-            self.transport.write(data)
-            gs_queue.get().addCallback(sendData)
-        gs_queue.get().addCallback(sendData)
+        self.gs.queue.get().addCallback(self.sendData)
+
+    def sendData(data):
+        self.transport.write(data)
+        self.gs.queue.get().addCallback(self.sendData)
 
     def connectionLost(self, reason):
         print "lost connection to", host, "port", self.port
@@ -60,4 +61,3 @@ class GameConnection:
         lc.start(1/60)
         reactor.connectTCP(host, port1, ClientConnectionFactory(port1, gs))
         reactor.run()
-
