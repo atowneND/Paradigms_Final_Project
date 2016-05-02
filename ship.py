@@ -36,11 +36,22 @@ class Ship(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (int(self.size[0]*scale_fac), int(self.size[1]*scale_fac)))
 
         # shields
+        self.shields = 3
+        self.currentShield = 3
         # weapons
         # health
+        self.health = 20
         # crew?
 
     def tick(self):
         self.gs.screen.blit(self.image, self.rect)
+        for i in range(0, self.health):
+            healthRect = pygame.Rect(self.rect.x + i*20, self.rect.y - 40, 15, 15)
+            pygame.draw.rect(self.gs.screen, (0, 255, 0), healthRect, 0)
+        for i in range(0, self.shields):
+            width = 0
+            if i >= self.currentShield:
+                width = 2
+            shieldCircle = pygame.draw.circle(self.gs.screen, (0, 0, 255), (self.rect.x + i*30 + 10, self.rect.y - 10), 10, width) 
         self.grid.tick()
 
