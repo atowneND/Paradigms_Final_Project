@@ -14,8 +14,6 @@ from ship import Ship
 from gamespace import GameSpace
 
 host = "student02.cse.nd.edu"
-port1 = 40084
-port2 = 40092
 
 gs_queue = DeferredQueue()
 
@@ -38,6 +36,7 @@ class ClientConnection(Protocol):
 
     def connectionLost(self, reason):
         print "lost connection to", host, "port", self.port
+        reactor.stop()
 
 class ClientConnectionFactory(ClientFactory):
     def __init__(self, port, gs):
@@ -55,9 +54,9 @@ class ClientConnectionFactory(ClientFactory):
             print "Connection failed"
 
 class GameConnection:
-    def __init__(self):
+    def __init__(self, port):
         gs = GameSpace(gs_queue)
         lc = LoopingCall(gs.update, gs_queue)
         lc.start(1/60)
-        reactor.connectTCP(host, port1, ClientConnectionFactory(port1, gs))
+        reactor.connectTCP(host, port, ClientConnectionFactory(port, gs))
         reactor.run()

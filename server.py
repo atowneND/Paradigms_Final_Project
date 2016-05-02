@@ -7,7 +7,8 @@ from twisted.internet import reactor
 import time
 import cPickle as pickle
 
-playersReady = 0
+p1Ship = ""
+p2Ship = ""
 
 class PlayerCommand(LineReceiver):
     def __init__(self, port):
@@ -15,12 +16,16 @@ class PlayerCommand(LineReceiver):
         self.port = port
 
     def connectionMade(self):
+        print 'connection made on port ', self.port
         self.queue.get().addCallback(self.callback) 
 
     def dataReceived(self, data):
-        print data
-        global playersReady
-        playersReady += 1
+        global p1Ship, p2Ship
+        if p1Ship == "" or p2Ship == "":
+            if self.port == 40084:
+                p1Ship = data
+            elif self.port == 40092:
+                p2Ship = data
 
     def callback(self, data):
         self.transport.write(data)
@@ -30,7 +35,6 @@ class PlayerCommand(LineReceiver):
 class PlayerFactory(Factory):
     def __init__(self, port):
         self.port = port
-        pass
 
     def buildProtocol(self, addr):
         return PlayerCommand(self.port)
@@ -42,7 +46,8 @@ class GameSpace():
 
     def tick(self):
         # Update the gamespace
-        while playersReady == 2:
+        global p1Ship, p2Ship
+        if p1Ship != "" and p2Ship != "":
             print 'update'
 
 if __name__ == '__main__':

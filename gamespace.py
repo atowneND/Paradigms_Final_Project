@@ -45,7 +45,7 @@ class GameSpace:
                         self.menu = Menu(self, "ship_menu.csv")
                         self.menu.tick()
                     elif p == "Blueship" or p == "Cruiser":
-                        self.queue.put(p)
+                        self.queue.put(p) 
                         self.screen.fill(self.black)
                         self.gameStarted = True
 
