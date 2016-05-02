@@ -23,6 +23,7 @@ class GameSpace:
         queue.put(ship + "\r\n")
 
         self.menu = Menu(self, "main_menu.csv")
+        #self.menu = Menu(self, "ship_menu.csv")
         self.menu.tick()
 
     def update(self, queue):
@@ -43,6 +44,9 @@ class GameSpace:
                 else: 
                     p = self.menu.clickHandler(self.mouse_pos)
                     print p
+                    if p == "PLAY":
+                        self.menu = Menu(self, "ship_menu.csv")
+                        self.menu.tick()
 
             if self.gameStarted:
                 self.test_Ship(self.ship)

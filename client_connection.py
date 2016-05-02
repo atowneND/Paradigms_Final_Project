@@ -57,7 +57,7 @@ class GameConnection:
     def __init__(self):
         gs = GameSpace(gs_queue)
         lc = LoopingCall(gs.update, gs_queue)
-        lc.start(0.1)
+        lc.start(1/60)
         reactor.connectTCP(host, port1, ClientConnectionFactory(port1, gs))
         reactor.run()
 

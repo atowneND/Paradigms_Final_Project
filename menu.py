@@ -15,6 +15,7 @@ class Menu():
         self.myfont = pygame.font.SysFont("monospace",50)
 
     def tick(self):
+        self.gs.screen.fill(self.gs.black)
         for i in self.menu_words:
             label = self.myfont.render(i[0], 1, i[1]["color"])
             self.gs.screen.blit(label, i[1]["position"])
