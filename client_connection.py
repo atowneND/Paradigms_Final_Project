@@ -49,7 +49,7 @@ class ClientConnectionFactory(ClientFactory):
 
 class GameConnection:
     def __init__(self, port):
-        gs = GameSpace(gs_queue)
+        gs = GameSpace(gs_queue, port)
         lc = LoopingCall(gs.update, gs_queue)
         lc.start(1/60)
         reactor.connectTCP(host, port, ClientConnectionFactory(port, gs))

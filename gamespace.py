@@ -6,10 +6,10 @@ from ship import Ship
 from twisted.internet import reactor as reactor
 
 class GameSpace:
-    def __init__(self, queue):
+    def __init__(self, queue, port):
         pygame.init()
 
-        self.size = self.width, self.height = (1200, 600)
+        self.size = self.width, self.height = (1400, 600)
         self.black = 0, 0, 0
 
         self.screen = pygame.display.set_mode(self.size, 0, 32)
@@ -19,8 +19,13 @@ class GameSpace:
         self.gameStarted = False
         self.queue = queue
 
+        self.player = 0
+        if port == 40084:
+            self.player = 1
+        else:
+            self.player = 2
+
         self.menu = Menu(self, "main_menu.csv")
-        #self.menu = Menu(self, "ship_menu.csv")
         self.menu.tick()
         self.ship = None
 
@@ -48,7 +53,7 @@ class GameSpace:
                     elif p == "Blueship" or p == "Cruiser":
                         self.queue.put(p) 
                         self.screen.fill(self.black)
-                        self.ship = Ship(self,p.lower())
+                        self.ship = Ship(self,p.lower(),str(self.player))
                         self.gameStarted = True
 
             if self.gameStarted:
@@ -56,7 +61,3 @@ class GameSpace:
 
             pygame.display.flip()
             self.mouse_pos = (0,0)
-
-    def test_Ship(self, ship):
-        # tests Ship() and Maps()
-        ship.tick()

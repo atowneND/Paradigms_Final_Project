@@ -3,10 +3,10 @@ import csv
 from maps import Maps
 
 class Ship(pygame.sprite.Sprite):
-    def __init__(self, gs, ship_type):
-        img = ship_type + "/ship.png"
-        settings = ship_type + "/settings.csv"
-        gridfile = ship_type + "/grid.dat"
+    def __init__(self, gs, ship_type, player):
+        img = ship_type + "/ship" + player + ".png"
+        settings = ship_type + "/settings" + player + ".csv"
+        gridfile = ship_type + "/grid" + player + ".dat"
         pygame.sprite.Sprite.__init__(self)
         with open(settings) as f:
             data = csv.DictReader(f)
