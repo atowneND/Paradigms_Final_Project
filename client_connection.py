@@ -32,7 +32,7 @@ class ClientConnection(Protocol):
         print "now connected to", host, "port", self.port
         self.gs.queue.get().addCallback(self.sendData)
 
-    def sendData(data):
+    def sendData(self, data):
         self.transport.write(data)
         self.gs.queue.get().addCallback(self.sendData)
 

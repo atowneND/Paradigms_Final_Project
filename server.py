@@ -10,8 +10,9 @@ import cPickle as pickle
 playersReady = 0
 
 class PlayerCommand(LineReceiver):
-    def __init__(self):
+    def __init__(self, port):
         self.queue = DeferredQueue()
+        self.port = port
 
     def connectionMade(self):
         self.queue.get().addCallback(self.callback) 
@@ -27,11 +28,12 @@ class PlayerCommand(LineReceiver):
 
 
 class PlayerFactory(Factory):
-    def __init__(self):
+    def __init__(self, port):
+        self.port = port
         pass
 
     def buildProtocol(self, addr):
-        return PlayerCommand()
+        return PlayerCommand(self.port)
 
 class GameSpace():
     def __init__(self):
@@ -44,8 +46,8 @@ class GameSpace():
             print 'update'
 
 if __name__ == '__main__':
-    reactor.listenTCP(40084, PlayerFactory())
-    reactor.listenTCP(40092, PlayerFactory())
+    reactor.listenTCP(40084, PlayerFactory(40084))
+    reactor.listenTCP(40092, PlayerFactory(40092))
     gs = GameSpace()
     LC = LoopingCall(gs.tick)
     LC.start(1/60)
