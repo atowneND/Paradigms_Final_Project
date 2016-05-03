@@ -6,19 +6,29 @@ from ship import Ship
 from twisted.internet import reactor as reactor
 
 class GameSpace:
-    def __init__(self, queue):
+    def __init__(self, queue, port):
         pygame.init()
 
-        self.size = self.width, self.height = (2048, 2048)
+        self.size = self.width, self.height = (1400, 600)
         self.black = 0, 0, 0
 
         self.screen = pygame.display.set_mode(self.size, 0, 32)
 
         self.mouse_pos = [0,0]
 
-        ship = "cruiser"
-        self.ship = Ship(self, ship)
-        queue.put(ship + "\r\n")
+        self.gameStarted = False
+        self.queue = queue
+
+        self.player = 0
+        if port == 40084:
+            self.player = 1
+        else:
+            self.player = 2
+
+        self.menu = Menu(self, "main_menu.csv")
+        self.menu.tick()
+        self.myShip = None
+        self.otherShip = None
 
     def update(self, queue):
         for event in pygame.event.get():
@@ -33,16 +43,24 @@ class GameSpace:
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 # http://stackoverflow.com/questions/12150957/pygame-action-when-mouse-click-on-rect
                 self.mouse_pos = pygame.mouse.get_pos()
-            self.test_Ship(self.ship)
-            #self.test_main_menu()
+                if self.gameStarted:
+                    self.queue.put("DATA DATA DATA")
+                else: 
+                    p = self.menu.clickHandler(self.mouse_pos)
+                    print p
+                    if p == "PLAY":
+                        self.menu = Menu(self, "ship_menu.csv")
+                        self.menu.tick()
+                    elif p == "Blueship" or p == "Cruiser":
+                        self.queue.put(p) 
+                        self.screen.fill(self.black)
+                        self.myShip = Ship(self,p.lower(),str(self.player))
+                        self.gameStarted = True
+
+            if self.gameStarted:
+                self.myShip.tick()
+                if self.otherShip != None:
+                    self.otherShip.tick()
+
             pygame.display.flip()
             self.mouse_pos = (0,0)
-
-    def test_main_menu(self):
-        csvfile = "main_menu.csv"
-        main_menu = Menu(self, csvfile)
-        main_menu.tick()
-
-    def test_Ship(self, ship):
-        # tests Ship() and Maps()
-        ship.tick()

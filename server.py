@@ -7,30 +7,62 @@ from twisted.internet import reactor
 import time
 import cPickle as pickle
 
-playersConnected = 0
+p1Ship = ""
+p2Ship = ""
+startGame = False
+queueToP1 = DeferredQueue()
+queueToP2 = DeferredQueue()
 
 class PlayerCommand(LineReceiver):
-    def __init__(self):
-        self.queue = DeferredQueue()
+    def __init__(self, port):
+        self.port = port
+        self.player = 0
+        if self.port == 40084:
+            self.player = 1
+        else:
+            self.player = 2
 
     def connectionMade(self):
-       playersConnected += 1
-       self.queue.get().addCallback(self.callback) 
+        print 'connection made on port ', self.port
+        if self.player == 1:
+            queueToP1.get().addCallback(self.callback)
+        else:
+            queueToP2.get().addCallback(self.callback)
 
-    #def dataReceived(self, data):
-        # handle received data
+    def lineReceived(self, line):
+        print "Player", self.player, "sent data:", line
+        global p1Ship, p2Ship
+        if p1Ship == "" or p2Ship == "":
+            if self.player == 1:
+                p1Ship = line
+            else:
+                p2Ship = line
+            # Send ship data if both players ready
+            if p1Ship != "" and p2Ship != "":
+                queueToP1.put("START " + p2Ship + " 2")
+                queueToP2.put("START " + p1Ship + " 1")
+        else:
+            if self.player == 1:
+                queueToP2.put(line)
+            else:
+                queueToP1.put(line)
+
 
     def callback(self, data):
         self.transport.write(data)
-        self.queue.get().addCallback(self.callback) 
+        
+        if self.player == 1:
+            queueToP1.get().addCallback(self.callback) 
+        else:
+            queueToP2.get().addCallback(self.callback) 
 
 
 class PlayerFactory(Factory):
-    def __init__(self):
-        pass
+    def __init__(self, port):
+        self.port = port
 
     def buildProtocol(self, addr):
-        return PlayerCommand(addr)
+        return PlayerCommand(self.port)
 
 class GameSpace():
     def __init__(self):
@@ -39,14 +71,13 @@ class GameSpace():
 
     def tick(self):
         # Update the gamespace
-        print 'update'
+        global p1Ship, p2Ship
+        if p1Ship != "" and p2Ship != "":
+            return
 
 if __name__ == '__main__':
-    reactor.listenTCP(40084, PlayerFactory())
-    reactor.listenTCP(40092, PlayerFactory())
-    while playersConnected != 2:
-        time.sleep(2)
-        print "Waiting for players to join..."
+    reactor.listenTCP(40084, PlayerFactory(40084))
+    reactor.listenTCP(40092, PlayerFactory(40092))
     gs = GameSpace()
     LC = LoopingCall(gs.tick)
     LC.start(1/60)

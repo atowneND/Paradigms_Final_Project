@@ -14,8 +14,6 @@ from ship import Ship
 from gamespace import GameSpace
 
 host = "student02.cse.nd.edu"
-port1 = 40084
-port2 = 40092
 
 gs_queue = DeferredQueue()
 
@@ -25,18 +23,24 @@ class ClientConnection(Protocol):
         self.port = port
         self.gs = gs
 
-    def lineReceived(self, data):
+    def dataReceived(self, data):
         print "received data:", data
+        strings = data.split()
+        if strings[0] == "START":
+            self.gs.otherShip = Ship(self.gs, strings[1].lower(), strings[2])
+            self.gs.otherShip.tick()
 
     def connectionMade(self):
         print "now connected to", host, "port", self.port
-        def sendData(data):
-            self.transport.write(data)
-            gs_queue.get().addCallback(sendData)
-        gs_queue.get().addCallback(sendData)
+        self.gs.queue.get().addCallback(self.sendData)
+
+    def sendData(self, data):
+        self.transport.write(data + self.delimiter)
+        self.gs.queue.get().addCallback(self.sendData)
 
     def connectionLost(self, reason):
         print "lost connection to", host, "port", self.port
+        reactor.stop()
 
 class ClientConnectionFactory(ClientFactory):
     def __init__(self, port, gs):
@@ -47,18 +51,10 @@ class ClientConnectionFactory(ClientFactory):
     def buildProtocol(self, addr):
         return ClientConnection(self.port, self.gs)
 
-    def clientConnectionFailed(self, connector, reason):
-        if self.port == port1:
-            reactor.connectTCP(host, port2, ClientConnectionFactory(port2, self.gs))
-        else:
-            print "Connection failed"
-
 class GameConnection:
-    def __init__(self):
-        gs = GameSpace(gs_queue)
+    def __init__(self, port):
+        gs = GameSpace(gs_queue, port)
         lc = LoopingCall(gs.update, gs_queue)
-        lc.start(0.1)
-
-        reactor.connectTCP(host, port1, ClientConnectionFactory(port1, gs))
+        lc.start(1/60)
+        reactor.connectTCP(host, port, ClientConnectionFactory(port, gs))
         reactor.run()
-

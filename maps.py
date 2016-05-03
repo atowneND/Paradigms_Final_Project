@@ -6,10 +6,10 @@ GREEN = (0,255,150)
 RED = (235, 12, 12)
 
 class Maps():
-    def __init__(self, gs, csvfile):
+    def __init__(self, gs, pos, csvfile):
         self.gs = gs
         width = 50
-        top_left_corner = (100,100)
+        top_left_corner = pos
 
         with open(csvfile) as f:
             self.layout = [[int(x) for x in line.split()] for line in f]
