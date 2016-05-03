@@ -64,6 +64,7 @@ class Maps():
         for b in self.grid:
             if pygame.Rect(b.x, b.y, b.width, b.height).collidepoint(self.gs.mouse_pos):
                 if b.color != GREEN:
+                    self.gs.queue.put(b.room+" room selected")
                     b.color = GREEN
                 else:
                     b.color = WHITE

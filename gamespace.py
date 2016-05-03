@@ -30,7 +30,7 @@ class GameSpace:
         self.myShip = None
         self.otherShip = None
 
-    def update(self, queue):
+    def update(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 reactor.stop()
@@ -45,14 +45,14 @@ class GameSpace:
                 self.mouse_pos = pygame.mouse.get_pos()
                 if self.gameStarted:
                     self.queue.put("DATA DATA DATA")
-                else: 
+                else:
                     p = self.menu.clickHandler(self.mouse_pos)
                     print p
                     if p == "PLAY":
                         self.menu = Menu(self, "ship_menu.csv")
                         self.menu.tick()
                     elif p == "Blueship" or p == "Cruiser":
-                        self.queue.put(p) 
+                        self.queue.put(p)
                         self.screen.fill(self.black)
                         self.myShip = Ship(self,p.lower(),str(self.player))
                         self.gameStarted = True

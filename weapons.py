@@ -16,4 +16,4 @@ class Weapons(pygame.sprite.Sprite):
         self.gs.screen.blit(self.image, self.rect)
         if self.rect.collidepoint(self.gs.mouse_pos):
             print "FIRE"
-            self.fire = True
+            self.firing_enabled = True
