@@ -40,7 +40,6 @@ class ClientConnection(Protocol):
 
     def connectionLost(self, reason):
         print "lost connection to", host, "port", self.port
-        reactor.stop()
 
 class ClientConnectionFactory(ClientFactory):
     def __init__(self, port, gs):
