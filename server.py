@@ -50,11 +50,11 @@ class PlayerCommand(LineReceiver):
 
     def callback(self, data):
         self.transport.write(data)
-        
+
         if self.player == 1:
-            queueToP1.get().addCallback(self.callback) 
+            queueToP1.get().addCallback(self.callback)
         else:
-            queueToP2.get().addCallback(self.callback) 
+            queueToP2.get().addCallback(self.callback)
 
 
 class PlayerFactory(Factory):
@@ -78,7 +78,4 @@ class GameSpace():
 if __name__ == '__main__':
     reactor.listenTCP(40084, PlayerFactory(40084))
     reactor.listenTCP(40092, PlayerFactory(40092))
-    gs = GameSpace()
-    LC = LoopingCall(gs.tick)
-    LC.start(1/60)
     reactor.run()
