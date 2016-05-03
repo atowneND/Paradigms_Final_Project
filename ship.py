@@ -29,7 +29,7 @@ class Ship(pygame.sprite.Sprite):
         else:
             grid_pos = (self.rect.x+100, self.rect.y+50)
 
-        self.grid = Maps(self.gs, grid_pos, gridfile)
+        self.grid = Maps(self, grid_pos, gridfile)
 
         # resize
         scale_fac = float(self.settings['scale_fac'])
@@ -40,9 +40,9 @@ class Ship(pygame.sprite.Sprite):
         self.shields = 3
         self.currentShield = 3
         # weapons
-#        weapon_name = "ion2.png"
-#        weapon_dir = "weapons/"+weapon_name
-#        self.weapon = Weapons(self, weapon_dir)
+        weapon_name = "ion2.png"
+        weapon_dir = "weapons/"+weapon_name
+        self.weapon = Weapons(self, weapon_dir)
         # health
         self.health = 20
         # crew?
@@ -57,6 +57,6 @@ class Ship(pygame.sprite.Sprite):
             if i >= self.currentShield:
                 width = 2
             shieldCircle = pygame.draw.circle(self.gs.screen, (0, 0, 255), (self.rect.x + i*30 + 10, self.rect.y - 10), 10, width)
-#        self.weapon.tick()
         self.grid.tick()
+        self.weapon.tick()
 

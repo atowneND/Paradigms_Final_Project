@@ -6,8 +6,9 @@ GREEN = (0,255,150)
 RED = (235, 12, 12)
 
 class Maps():
-    def __init__(self, gs, pos, csvfile):
-        self.gs = gs
+    def __init__(self, ship, pos, csvfile):
+        self.gs = ship.gs
+        self.ship = ship
         width = 50
         top_left_corner = pos
 
@@ -37,6 +38,7 @@ class Maps():
                     elif room==4:
                         b.room = "weapons"
                         b.img = "rooms/"+b.room+".png"
+                        self.ship.weapons_room = (b.x + b.width/2., b.y + b.height/2.)
                     elif room==5:
                         b.room = "engines"
                         b.img = "rooms/"+b.room+".png"
