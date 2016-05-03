@@ -1,6 +1,7 @@
 import pygame
 import csv
 from maps import Maps
+from weapons import Weapons
 
 class Ship(pygame.sprite.Sprite):
     def __init__(self, gs, ship_type, player):
@@ -29,7 +30,7 @@ class Ship(pygame.sprite.Sprite):
             grid_pos = (self.rect.x+100, self.rect.y+50)
 
         self.grid = Maps(self.gs, grid_pos, gridfile)
-        
+
         # resize
         scale_fac = float(self.settings['scale_fac'])
         self.size = self.image.get_size()
@@ -39,6 +40,9 @@ class Ship(pygame.sprite.Sprite):
         self.shields = 3
         self.currentShield = 3
         # weapons
+#        weapon_name = "ion2.png"
+#        weapon_dir = "weapons/"+weapon_name
+#        self.weapon = Weapons(self, weapon_dir)
         # health
         self.health = 20
         # crew?
@@ -52,6 +56,7 @@ class Ship(pygame.sprite.Sprite):
             width = 0
             if i >= self.currentShield:
                 width = 2
-            shieldCircle = pygame.draw.circle(self.gs.screen, (0, 0, 255), (self.rect.x + i*30 + 10, self.rect.y - 10), 10, width) 
+            shieldCircle = pygame.draw.circle(self.gs.screen, (0, 0, 255), (self.rect.x + i*30 + 10, self.rect.y - 10), 10, width)
+#        self.weapon.tick()
         self.grid.tick()
 
