@@ -73,10 +73,11 @@ class Maps():
                     self.gs.queue.put("FIRE " + b.room + " " + str(target[0]) + " " + str(target[1]))
                     self.gs.myShip.weapon.target = target
                     print "new target: my ship firing on ",target
-                elif self.gs.otherShip.weapon.firing_enabled == True:
-                    self.gs.queue.put("FIRE " + b.room + " " + str(target[0]) + " " + str(target[1]))
-                    self.gs.otherShip.weapon.target = target
-                    print "new target: other ship firing on",target
+                elif self.gs.otherShip != None:
+                    if self.gs.otherShip.weapon.firing_enabled == True:
+                        self.gs.queue.put("FIRE " + b.room + " " + str(target[0]) + " " + str(target[1]))
+                        self.gs.otherShip.weapon.target = target
+                        print "new target: other ship firing on",target
             size = (b.x,b.y,b.width,b.height)
             self.draw_box(size, b.color)
             if b.img:
