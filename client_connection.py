@@ -31,6 +31,7 @@ class ClientConnection(Protocol):
             self.gs.otherShip.tick()
         elif strings[0] == "FIRE":
             self.gs.myShip.weapon.target = (float(strings[2]), float(strings[3]))
+            self.gs.myShip.weapon.firing_enabled = True
             print "firing on coordinates", strings[2], strings[3]
 
     def connectionMade(self):
@@ -43,6 +44,7 @@ class ClientConnection(Protocol):
 
     def connectionLost(self, reason):
         print "lost connection to", host, "port", self.port
+        reactor.stop()
 
 class ClientConnectionFactory(ClientFactory):
     def __init__(self, port, gs):
