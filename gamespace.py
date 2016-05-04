@@ -67,3 +67,13 @@ class GameSpace:
 
         pygame.display.flip()
         self.mouse_pos = (0,0)
+
+    # Reset player to first menu if other player disconnects
+    def restart(self):
+        self.screen.fill(self.black)
+        self.gameStarted = False
+        self.menu = Menu(self, "main_menu.csv")
+        self.menu.tick()
+        self.myShip = None
+        self.otherShip = None
+

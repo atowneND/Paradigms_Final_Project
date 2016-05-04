@@ -13,7 +13,7 @@ from menu import Menu
 from ship import Ship
 from gamespace import GameSpace
 
-host = "student02.cse.nd.edu"
+host = "student03.cse.nd.edu"
 
 gs_queue = DeferredQueue()
 
@@ -33,6 +33,8 @@ class ClientConnection(Protocol):
             self.gs.otherShip.weapon.target = (float(strings[2]), float(strings[3]))
             self.gs.otherShip.weapon.firing_enabled = True
             print "firing on coordinates", strings[2], strings[3]
+        elif strings[0] == "RESTART":
+            self.gs.restart()
 
     def connectionMade(self):
         print "now connected to", host, "port", self.port
@@ -44,7 +46,7 @@ class ClientConnection(Protocol):
 
     def connectionLost(self, reason):
         print "lost connection to", host, "port", self.port
-        reactor.stop()
+        #reactor.stop()
 
 class ClientConnectionFactory(ClientFactory):
     def __init__(self, port, gs):

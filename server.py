@@ -9,7 +9,6 @@ import cPickle as pickle
 
 p1Ship = ""
 p2Ship = ""
-startGame = False
 queueToP1 = DeferredQueue()
 queueToP2 = DeferredQueue()
 
@@ -23,11 +22,19 @@ class PlayerCommand(LineReceiver):
             self.player = 2
 
     def connectionMade(self):
-        print 'connection made on port ', self.port
+        print p1Ship, p2Ship
+        print 'connection made on port', self.port
         if self.player == 1:
             queueToP1.get().addCallback(self.callback)
         else:
             queueToP2.get().addCallback(self.callback)
+    
+    def connectionLost(self, reason):
+        print 'lost connection on port', self.port 
+        queueToP1.put("RESTART " + str(self.player))
+        queueToP2.put("RESTART " + str(self.player))
+        global p1Ship, p2Ship
+        p1Ship = p2Ship = ""
 
     def lineReceived(self, line):
         print "Player", self.player, "sent data:", line
@@ -51,10 +58,21 @@ class PlayerCommand(LineReceiver):
     def callback(self, data):
         self.transport.write(data)
 
-        if self.player == 1:
-            queueToP1.get().addCallback(self.callback)
+        strings = data.strip()
+        if strings[0] == "RESTART":
+            if strings[1] == "1" and str(self.player) == "1":
+                queueToP2.get().addCallback(self.callback)
+                print str(self.player), "callback to p2"
+            elif strings[1] == "2" and str(self.player) == "2":
+                queueToP1.get().addCallback(self.callback)
+                print str(self.player), "callback to p1"
         else:
-            queueToP2.get().addCallback(self.callback)
+            if self.player == 1:
+                queueToP1.get().addCallback(self.callback)
+                print str(self.player), "callback to p1"
+            else:
+                queueToP2.get().addCallback(self.callback)
+                print str(self.player), "callback to p2"
 
 
 class PlayerFactory(Factory):
