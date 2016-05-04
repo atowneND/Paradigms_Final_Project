@@ -78,6 +78,12 @@ class Maps():
                         self.gs.queue.put("FIRE " + b.room + " " + str(target[0]) + " " + str(target[1]))
                         self.gs.otherShip.weapon.target = target
                         print "new target: other ship firing on",target
+            else:
+                if b.color == GREEN:
+                    b.flash += 1
+                    if b.flash > 50:
+                        b.color = WHITE
+                        b.flash = 0
             size = (b.x,b.y,b.width,b.height)
             self.draw_box(size, b.color)
             if b.img:
@@ -112,3 +118,4 @@ class Box():
         self.width = width
         self.height = width
         self.color = (0,0,0)
+        self.flash = 0
