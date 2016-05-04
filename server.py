@@ -10,6 +10,7 @@ import cPickle as pickle
 p1Ship = ""
 p2Ship = ""
 startGame = False
+# Deferred queues for the two clients
 queueToP1 = DeferredQueue()
 queueToP2 = DeferredQueue()
 
@@ -64,6 +65,7 @@ class PlayerFactory(Factory):
     def buildProtocol(self, addr):
         return PlayerCommand(self.port)
 
+# Not necessary after all
 class GameSpace():
     def __init__(self):
        # initialize gs

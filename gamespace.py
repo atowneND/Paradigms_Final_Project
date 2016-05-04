@@ -17,6 +17,8 @@ class GameSpace:
         self.mouse_pos = [0,0]
 
         self.gameStarted = False
+        self.gameOver = 0
+        self.cease = False
         self.queue = queue
 
         self.player = 0
@@ -47,6 +49,7 @@ class GameSpace:
                     pass
                     #self.queue.put("DATA DATA DATA")
                 else:
+                    # Check if any options have been selected in the menus
                     p = self.menu.clickHandler(self.mouse_pos)
                     print p
                     if p == "PLAY":
@@ -57,6 +60,16 @@ class GameSpace:
                         self.screen.fill(self.black)
                         self.myShip = Ship(self,p.lower(),str(self.player))
                         self.gameStarted = True
+        
+        # If game over, broadcast winner and show end screen
+        if self.gameOver and not self.cease:
+            self.queue.put("END " + str(self.gameOver))
+            self.gameStarted = False
+            self.cease = True
+            self.screen.fill(self.black)
+            myfont = pygame.font.SysFont("monospace",50)
+            label = myfont.render("Player " + str(self.gameOver) + " WINS!", 1, (255,0,0))
+            self.screen.blit(label, (650, 300))
 
         # should everything from here forward be unindented by one block? so multiple events can occur on one tick?
         if self.gameStarted:

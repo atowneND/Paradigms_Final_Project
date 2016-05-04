@@ -68,4 +68,6 @@ class LaserBeam(pygame.sprite.Sprite):
             self.weapon.firing_enabled = False
             self.weapon.target = self.weapon.origin
             self.weapon.ctr = 0
-            self.weapon.enemy_ship.health = self.weapon.enemy_ship.health - 2
+            self.weapon.enemy_ship.health = self.weapon.enemy_ship.health - 5
+            if self.weapon.enemy_ship.health == 0:
+                self.gs.gameOver = self.gs.player
