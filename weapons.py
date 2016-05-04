@@ -60,6 +60,7 @@ class LaserBeam(pygame.sprite.Sprite):
         self.weapon = weapon
 
     def tick(self):
+        # increment location of laser beam
         self.nextpoint = (self.start[0] + self.dx/self.speed, self.start[1] + self.dy/self.speed)
         pygame.draw.line(self.gs.screen, (255,0,0), self.start, self.nextpoint, 12)
         self.start = (self.start[0] + self.dx/(8*self.speed), self.start[1] + self.dy/(8*self.speed))

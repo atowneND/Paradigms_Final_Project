@@ -39,6 +39,7 @@ class Maps():
                     elif room==4:
                         b.room = "weapons"
                         b.img = "rooms/"+b.room+".png"
+                        # get center of room
                         self.ship.weapons_room = (b.x + b.width/2., b.y + b.height/2.)
                     elif room==5:
                         b.room = "engines"
@@ -65,6 +66,7 @@ class Maps():
         for b in self.grid:
             if pygame.Rect(b.x, b.y, b.width, b.height).collidepoint(self.gs.mouse_pos):
                 target = (b.x + b.width/2., b.y + b.width/2.)
+                # acknowledge selection
                 if b.color != GREEN:
                     b.color = GREEN
                 else:
@@ -79,6 +81,7 @@ class Maps():
                         self.gs.otherShip.weapon.target = target
                         print "new target: other ship firing on",target
             else:
+                # after acknowledging selection, go back to normal
                 if b.color == GREEN:
                     b.flash += 1
                     if b.flash > 50:
