@@ -6,6 +6,7 @@ GREEN = (0,255,150)
 RED = (235, 12, 12)
 
 class Maps():
+    # reformat inputs?
     def __init__(self, ship, pos, csvfile):
         self.gs = ship.gs
         self.ship = ship
@@ -45,7 +46,7 @@ class Maps():
                     elif room==6:
                         b.room = "sensors"
                         b.img = "rooms/"+b.room+".png"
-                    elif room==7:
+                    elif room==9:
                         b.room = "medbay"
                         b.img = "rooms/"+b.room+".png"
                     elif room==8:
@@ -63,11 +64,19 @@ class Maps():
     def draw_grid(self):
         for b in self.grid:
             if pygame.Rect(b.x, b.y, b.width, b.height).collidepoint(self.gs.mouse_pos):
+                target = (b.x + b.width/2., b.y + b.width/2.)
                 if b.color != GREEN:
-                    self.gs.queue.put(b.room+" room selected")
                     b.color = GREEN
                 else:
                     b.color = WHITE
+                if self.gs.myShip.weapon.firing_enabled == True:
+                    self.gs.queue.put("FIRE " + b.room + " " + str(target[0]) + " " + str(target[1]))
+                    self.gs.myShip.weapon.target = target
+                    print "new target: my ship firing on ",target
+                elif self.gs.otherShip.weapon.firing_enabled == True:
+                    self.gs.queue.put("FIRE " + b.room + " " + str(target[0]) + " " + str(target[1]))
+                    self.gs.otherShip.weapon.target = target
+                    print "new target: other ship firing on",target
             size = (b.x,b.y,b.width,b.height)
             self.draw_box(size, b.color)
             if b.img:

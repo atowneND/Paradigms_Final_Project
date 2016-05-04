@@ -8,6 +8,8 @@ class Ship(pygame.sprite.Sprite):
         img = ship_type + "/ship" + player + ".png"
         settings = ship_type + "/settings" + player + ".csv"
         gridfile = ship_type + "/grid" + player + ".dat"
+        self.player = player
+
         pygame.sprite.Sprite.__init__(self)
         with open(settings) as f:
             data = csv.DictReader(f)

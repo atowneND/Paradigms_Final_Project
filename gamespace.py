@@ -44,7 +44,8 @@ class GameSpace:
                 # http://stackoverflow.com/questions/12150957/pygame-action-when-mouse-click-on-rect
                 self.mouse_pos = pygame.mouse.get_pos()
                 if self.gameStarted:
-                    self.queue.put("DATA DATA DATA")
+                    pass
+                    #self.queue.put("DATA DATA DATA")
                 else:
                     p = self.menu.clickHandler(self.mouse_pos)
                     print p
@@ -57,10 +58,12 @@ class GameSpace:
                         self.myShip = Ship(self,p.lower(),str(self.player))
                         self.gameStarted = True
 
-            if self.gameStarted:
-                self.myShip.tick()
-                if self.otherShip != None:
-                    self.otherShip.tick()
+        # should everything from here forward be unindented by one block? so multiple events can occur on one tick?
+        if self.gameStarted:
+            self.screen.fill(self.black)
+            self.myShip.tick()
+            if self.otherShip != None:
+                self.otherShip.tick()
 
-            pygame.display.flip()
-            self.mouse_pos = (0,0)
+        pygame.display.flip()
+        self.mouse_pos = (0,0)
