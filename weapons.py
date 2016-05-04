@@ -33,3 +33,13 @@ class Weapons(pygame.sprite.Sprite):
                     self.firing_enabled = False
                     self.ctr = 0
                     self.target = self.origin
+        elif (self.ship_player!=int(self.gs.player)) and (self.firing_enabled == True):
+            start = self.origin
+            end = self.target
+            width = 4
+            pygame.draw.line(self.gs.screen, color, start, end, width)
+            self.ctr += 1
+            if self.ctr > self.duration:
+                self.firing_enabled = False
+                self.ctr = 0
+                self.target = self.origin

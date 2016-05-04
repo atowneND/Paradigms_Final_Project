@@ -30,8 +30,8 @@ class ClientConnection(Protocol):
             self.gs.otherShip = Ship(self.gs, strings[1].lower(), strings[2])
             self.gs.otherShip.tick()
         elif strings[0] == "FIRE":
-            self.gs.myShip.weapon.target = (float(strings[2]), float(strings[3]))
-            self.gs.myShip.weapon.firing_enabled = True
+            self.gs.otherShip.weapon.target = (float(strings[2]), float(strings[3]))
+            self.gs.otherShip.weapon.firing_enabled = True
             print "firing on coordinates", strings[2], strings[3]
 
     def connectionMade(self):
