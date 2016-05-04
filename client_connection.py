@@ -28,6 +28,8 @@ class ClientConnection(Protocol):
         strings = data.split()
         if strings[0] == "START":
             self.gs.otherShip = Ship(self.gs, strings[1].lower(), strings[2])
+            self.gs.myShip.weapon.enemy_ship = self.gs.otherShip
+            self.gs.otherShip.weapon.enemy_ship = self.gs.myShip
             self.gs.otherShip.tick()
         elif strings[0] == "FIRE":
             self.gs.otherShip.weapon.target = (float(strings[2]), float(strings[3]))

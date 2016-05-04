@@ -5,6 +5,7 @@ class Weapons(pygame.sprite.Sprite):
         self.gs = ship.gs
         self.ship_player = int(ship.player)
         self.ship = ship
+        self.enemy_ship = None
         self.image = pygame.image.load(img)
         self.rect = self.image.get_rect()
 
@@ -66,4 +67,4 @@ class LaserBeam(pygame.sprite.Sprite):
             self.weapon.firing_enabled = False
             self.weapon.target = self.weapon.origin
             self.weapon.ctr = 0
-            #self.weapon.enemy_ship.health = self.weapon.enemy_ship.health -5
+            self.weapon.enemy_ship.health = self.weapon.enemy_ship.health - 2
