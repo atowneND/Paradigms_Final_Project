@@ -25,7 +25,7 @@ class Weapons(pygame.sprite.Sprite):
         if (self.ship_player==int(self.gs.player)):
             if self.rect.collidepoint(self.gs.mouse_pos):
                 self.firing_enabled = True
-            if (self.firing_enabled==True) and (self.target != self.origin):
+            if (self.firing_enabled==True) and (self.target != self.origin) and not self.ship.shield_rect.collidepoint(self.target):
                 start = self.origin
                 end = self.target
 
@@ -35,7 +35,7 @@ class Weapons(pygame.sprite.Sprite):
                 self.laser.tick()
 
         # firing ship is opponent
-        elif (self.ship_player!=int(self.gs.player)) and (self.firing_enabled == True):
+        elif (self.ship_player!=int(self.gs.player)) and (self.firing_enabled == True) and not self.ship.shield_rect.collidepoint(self.target):
             start = self.origin
             end = self.target
 
@@ -54,7 +54,7 @@ class LaserBeam(pygame.sprite.Sprite):
         self.dy = end[1]-start[1]
         width = 50
         self.target = (self.end[0] - width/2., self.end[1] - width/2., width, width)
-        self.speed = 50
+        self.speed = 20
         self.nextpoint = (self.start[0] + self.dx/self.speed, self.start[1] + self.dy/self.speed)
 
         self.weapon = weapon
